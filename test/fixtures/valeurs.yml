@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  manip_id: 1
+  boul_id: 1
+  point: 1
+
+two:
+  manip_id: 1
+  boul_id: 1
+  point: 1

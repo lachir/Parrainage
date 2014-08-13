@@ -1,0 +1,47 @@
+<div class="container">
+	<h1 class="blue">Parrainage KIN</h1>
+	<br>
+	<% if session[:pg_level] %>
+		<p class="lead">Sal'ss PG !</p>
+		<p class="minilead">Grâce à ce site la SDT pourra juger de ta volonté d'obtenir un fillot piston, tu pourras y retrouver la liste de tes coprom'ss ainsi que celle des points et répondre à des sondages pour choisir tes fillots de semaine, et un jour peut être, ton fillot.</p>
+		<iframe src='http://cdn.knightlab.com/libs/timeline/latest/embed/index.html?source=0AoUrHP-h9r87dGdHdjVBSF9kWTd2S2VwejQtMDhSRlE&font=Bevan-PotanoSans&maptype=toner&lang=fr&height=650' width='100%' height='650' frameborder='0'></iframe>
+	<% else %>
+		<p class="lead">Aej'aa LH !</p>
+		<p class="lead">Hrebe é be aite je ADT lmurre juher de te vmjmzté d'mbtezir uz tijjmt liatmz, ta lmarrea y rabrmaver je jiate de tea bmlrmm'aa eizai qae bejje dea lmizta ab rélmzdre é dea amzdehea lmar bhmiair tea tijjmta de aemeize, ab az jmar laat atsa, tmz tijjmt.</p>
+		<p class="lead">Commence par <%= link_to "te connecter", beforelogin_path %>.</p>
+		<% end %>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>FT parrainage</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Saro²man 96-121</td>
+			</tr>
+			<tr>
+				<td>B-news 37<sub>78</sub></td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>VP parrainage</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>So²le²ter 156</td>
+			</tr>
+			<tr>
+				<td>Tassadar 104</td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="text-right text-small">
+		<%= link_to "Infos sur le programme", infos_path %>
+	</p>
+	
+</div>

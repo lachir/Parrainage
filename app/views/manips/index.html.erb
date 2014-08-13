@@ -1,0 +1,40 @@
+<div class="container">
+  <h1 class="blue">Manips passées et à venir</h1>
+  <%= link_to 'Nouvelle manip', new_manip_path %>
+</div>
+
+<div class="container">
+  <br>
+  <table class="table table-hover ">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Date</th>
+        <th>Lieu</th>
+        <th>Points (S/N/C/E/T/P)</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @manips.each do |manip| %>
+        <tr>
+          <td><%= link_to manip.nom, manip %></td>
+          <td><%= manip.date.strftime("%d/%m à %Hh%M") %></td>
+          <td><%= manip.lieu %></td>
+          <td>
+            <% s = "" %>
+            <% manip.valeurs.each do |v| %>
+              <% s += v.point.to_s + " / " %>
+            <% end %>
+            <%= s[0..-4] %>
+          </td>
+          <td><%= link_to 'Vérifier', verif_manip_path(manip) %> | <%= link_to 'Vérifier en masse', verifx_manip_path(manip) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <br>
+
+</div>

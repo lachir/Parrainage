@@ -1,0 +1,25 @@
+<div id="container" class="barcodecontainer clearfix">
+	
+</div>
+
+<script>
+
+$(function(){
+
+	var pgs = [
+		<% @pgs.each do |pg| %>
+			<%= raw '{ bucque:"' + pg.bucque + '", fam:"' + pg.fam + '", barcode:"' + pg.barcode + '"},' %> 
+		<% end %>
+	];
+
+	for (var i = 0; i < pgs.length; i++) {
+		$('#container').append('<div class="barcode"><div id="barcode'+i+'"></div>'+pgs[i].bucque+' '+pgs[i].fam+'</div>');
+		var s = "#barcode"+i;
+	console.log(s);
+		$(s).barcode(pgs[i].barcode, "code39", {showHRI:false,barWidth:1,barHeight:50});  
+	};
+
+});
+
+
+</script>

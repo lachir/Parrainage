@@ -1,0 +1,23 @@
+<div class="container">
+	<h1 class="blue">.onscrits de la .orde .14</h1>
+</div>
+<br>
+<div class="largecontainer">
+	<% i = 0 %>
+	<% @onscrits.each do |o| %>
+		<% if o.photo.exists? %>
+			<ul class="thumbnails gallery float-left learnonscrits">
+				<li class="thumbnail">
+					<%= image_tag o.photo.url(:medium), height: '300' %>
+					<div class="caption from-top">
+						<br>
+						<h3 style="color:#000;"><%= o.nom %><br><%= o.prenom %></h3>
+						<%= link_to o do %>
+							<i class="icon-eye-open icon-white"></i>
+						<% end %>
+					</div>
+				</li>
+			</ul>
+		<% end %>
+	<% end %>
+</div>

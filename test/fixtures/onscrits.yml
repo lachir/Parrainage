@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  nom: MyString
+  prenom: MyString
+  naissance: 2013-08-02
+  prepa_id: 1
+
+two:
+  nom: MyString
+  prenom: MyString
+  naissance: 2013-08-02
+  prepa_id: 1

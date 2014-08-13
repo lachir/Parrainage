@@ -1,0 +1,44 @@
+<div class="container">
+	<h1 class="blue">Liste des admins du site</h1>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Bucque et Fam'ss</th>
+				<th>Niveau</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @admins.each do |a| %>
+				<tr>
+					<td><%= a.bucque + ' ' + a.fam %></td>
+					<td><%= a.level %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+
+	<% if session[:pg_level] > 2 %>
+		<br>
+		<h2 class="blue">Nouvel administrateur</h2>
+		<%= form_tag set_admin_path do |f| %>
+			<div class="field textfield">
+		      <label>Bucque</label>
+		      <%= collection_select(nil, :pg_id, @pgs, :id, :bucque) %>
+		    </div>
+		    <div class="field textfield">
+		      <label>Niveau</label>
+		      <%= number_field_tag :level, 2, min: 1, max: 3  %>
+		    </div>
+	    	<div class="clearfix"></div>
+		    <div class="actions">
+		      <%= submit_tag "Promouvoir", class: 'btn btn-primary' %>
+		    </div>
+	    <% end %>
+	    <br><br>
+	<% end %>
+	
+	<p class="lead"><strong>Niveau 0 :</strong> Utilisateur non connecté, droit d'accéder à la liste et aux profils des PG et des .onscrits. Droit de créer un profil et une prépa.</p>
+	<p class="lead"><strong>Niveau 1 :</strong> Utilisateur connecté, droit de modifier son profil et de répondre aux sondages.</p>
+	<p class="lead"><strong>Niveau 2 :</strong> VP/FT parrainage, droit d'accéder à l'onglet Manip et aux fonctions associées, droit de créer/modifier/supprimer des PG, des .onscrits, des manips, des sondages et des données PG (boul'ss, prépas, ...).</p>
+	<p class="lead"><strong>Niveau 3 :</strong> Zt PHP, droit de créer/modifier/supprimer des admins.</p>
+</div>

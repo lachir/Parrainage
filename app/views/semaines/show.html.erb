@@ -1,0 +1,27 @@
+<div class="container">
+	
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nom:</strong>
+  <%= @semaine.nom %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @semaine.description %>
+</p>
+
+<p>
+  <strong>Startdate:</strong>
+  <%= @semaine.startdate %>
+</p>
+
+<p>
+  <strong>Enddate:</strong>
+  <%= @semaine.enddate %>
+</p>
+
+<%= link_to 'Edit', edit_semaine_path(@semaine) %> |
+<%= link_to 'Back', semaines_path %>
+</div>

@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  nom: MyString
+  prenom: MyString
+  bucque: MyString
+  fam: MyString
+  num: 1
+  saque: false
+  bio: MyText
+  boul_id: 1
+  prepa_id: 1
+
+two:
+  nom: MyString
+  prenom: MyString
+  bucque: MyString
+  fam: MyString
+  num: 1
+  saque: false
+  bio: MyText
+  boul_id: 1
+  prepa_id: 1

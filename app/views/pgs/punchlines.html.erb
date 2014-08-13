@@ -1,0 +1,21 @@
+<div class="container">
+	<h1 class="blue">Paye ta punchline !</h1>
+	<br>
+	<% @pgs.each do |pg| %>
+		<% if pg.bio? %>
+			<div class='testimonial'>
+				<blockquote>
+					<p class="lead">
+						<%= "« " + pg.bio + " »" %>
+						<% if pg.biocit? %>
+				        	<small><%= pg.biocit %></small>
+				        <% end %>
+			        </p>
+				</blockquote>
+				<p class='testimonial-footer'>
+					<b><%= pg.bucque + ' ' + pg.fam %></b>
+				</p>
+			</div>
+		<% end %>
+	<% end %>
+</div>

@@ -1,0 +1,30 @@
+<div class="container">
+  
+
+<h1>Boul'ss de KIN</h1>
+<%= link_to 'Nouveau boul\'ss', new_boul_path %>
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bouls.each do |boul| %>
+      <tr>
+        <td><%= boul.nom %></td>
+        <td><%= link_to 'Modifier', edit_boul_path(boul) %></td>
+        <td><%= link_to 'Détruire', boul, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+</div>

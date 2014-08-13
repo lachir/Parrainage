@@ -1,0 +1,143 @@
+<div class="container">
+	<div class="text-center">
+		
+	<h1 class="blue">
+		<%= @manip.nom %>
+	</h1>
+    <p>
+        <%= @manip.date.strftime("le %d/%m à %Hh%M") + ', ' + @manip.lieu %>
+        <br>
+        <% s = "" %>
+        <% @manip.valeurs.each do |v| %>
+        <% s += v.boul.nom + ': ' + v.point.to_s + ' / '%>
+        <% end %>
+        <%= s[0..-4] %>
+    </p>
+	<br>
+	</div>
+	
+	<div class="row">
+		<div class="span1"></div>
+		<div class="span5 text-right">
+			<h2 class="blue">Absents</h2>
+			<div data-bind='template: { foreach: absents}'>
+		        <div>
+		        	<span class="bucqueetfams" data-bind="text: bucqueetfam, click: $root.addPresent"></span>
+		        </div>
+		    </div>
+		</div>
+		<div class="span5">
+			<h2 class="blue">Présents</h2>
+			<div data-bind='template: { foreach: presents}'>
+		        <div>
+		        	<span class="bucqueetfams" data-bind="text: bucqueetfam, click: $root.addAbsent"></span>
+		        </div>
+		    </div>
+		</div>
+		<div class="span1"></div>
+	</div>
+
+</div>
+
+
+<script>
+function addPg(id, nom, prenom) {
+	var self         = this;
+	self.id          = id;
+	self.nom      = nom;
+	self.prenom         = prenom;
+	self.bucqueetfam = nom + ' ' + prenom;
+	/*var k = fam.length;
+	for (i = 0; i < fam.length; i++) {
+		if (isNaN(fam.substring(0,i+1))) {
+			k = i;
+			break;
+		};
+	};
+	self.num = parseInt(fam.substring(0,k));*/
+};
+
+
+var CheckPgViewModel = function() {
+
+	var self       = this;
+	self.itemToAdd = ko.observable("");
+	self.infoPg    = ko.observable("");
+	self.presents  = ko.observableArray([ 
+        <% @presences.each do |p| %> 
+        	<%= raw 'new addPg("'+ p.pg.id.to_s + '","' + p.pg.nom+ '","' + p.pg.prenom + '"),' %> 
+        <% end %>
+    ]);
+    self.absents = ko.observableArray([ 
+    	<% @pgs.each do |p| %> 
+        	<%= raw 'new addPg("'+ p.id.to_s + '","' + p.nom+ '","' + p.prenom + '"),' %> 
+        <% end %>
+    ]);
+    self.presents.sort(function(left, right) { 
+    	return left.nom == right.nom ? 0 : (left.nom < right.nom ? -1 : 1) 
+    });
+    self.absents.sort(function(left, right) { 
+    	return left.nom == right.nom ? 0 : (left.nom < right.nom ? -1 : 1) 
+    });
+
+    self.makePgList = function() {
+    	for (i = 0; i < self.presents().length; i++) {
+		    for (j = 0; j < self.absents().length; j++) {
+		    	if (self.presents()[i].id == self.absents()[j].id) {
+		    		self.absents.remove(self.absents()[j]);
+		    		break;
+		    	};
+		    };
+		};
+    };
+    self.makePgList();
+
+    self.addPresent = function(pg) {
+
+        self.absents.remove(pg);
+        self.presents.push(pg);
+        self.presents.sort(function(left, right) { 
+	    	return left.nom == right.nom ? 0 : (left.nom < right.nom ? -1 : 1) 
+	    });
+        jsondata = {id: pg.id, manip_id: <%= @manip.id.to_s %>};
+
+        $.post('<%= url_for(checkforverifx_pg_path) %>', jsondata, function(allData) {
+            if (allData.status == "ok") {
+            } else {
+                self.absents.push(pg);
+                self.presents.remove(pg);
+                self.absents.sort(function(left, right) { 
+	    	return left.nom == right.nom ? 0 : (left.nom < right.nom ? -1 : 1) 
+	    });
+            };
+        }).error(function() {
+            alert('erreur lors du post AJAX! Recharge la page (F5) avant de continuer.')
+        });
+    };
+
+    self.addAbsent = function(pg) {
+
+        self.presents.remove(pg);
+        self.absents.push(pg);
+        self.absents.sort(function(left, right) { 
+	    	return left.nom == right.nom ? 0 : (left.nom < right.nom ? -1 : 1) 
+	    });
+        jsondata = {id: pg.id, manip_id: <%= @manip.id.to_s %>};
+
+        $.post('<%= url_for(uncheckforverifx_pg_path) %>', jsondata, function(allData) {
+            if (allData.status == "ok") {
+            } else {
+                self.presents.push(pg);
+                self.absents.remove(pg);
+                self.presents.sort(function(left, right) { 
+		    	return left.nom == right.nom ? 0 : (left.nom < right.nom ? -1 : 1) 
+		    });
+            };
+        }).error(function() {
+            alert('erreur lors du post AJAX! Recharge la page (F5) avant de continuer.')
+        });
+    };
+};
+
+ko.applyBindings(new CheckPgViewModel());
+</script>

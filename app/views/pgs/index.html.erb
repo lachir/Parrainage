@@ -1,0 +1,106 @@
+<div class="container">
+  <h1 class='blue'>PG de la KIN 213</h1>
+  <br>
+</div>
+
+<div class="largecontainer">
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <% if session[:pg_level] && session[:pg_level] > 1 %>
+          <th class='text-center minsize' data-bind="sort: { arr: Records, prop: 'Points' }">Points</th>
+          <th class='text-center minsize' data-bind="sort: { arr: Records, prop: 'Pres' }">Manips</th>
+        <% end %>
+        <th data-bind="sort: { arr: Records, prop: 'Bucque' }" width="5%">Bucque</th>
+        <th data-bind="sort: { arr: Records, prop: 'Num' }" class="noleftborder">Fam'ss</th>
+        <th data-bind="sort: { arr: Records, prop: 'Name' }">Nom complet</th>
+        <th data-bind="sort: { arr: Records, prop: 'Boul' }">Boul'ss</th>
+        <th data-bind="sort: { arr: Records, prop: 'Prepa' }">Prépa</th>
+        <th colspan="2">Téléphone</th>
+      </tr>
+    </thead>
+    <tbody data-bind="foreach: Records">
+      <tr>
+        <% if session[:pg_level] && session[:pg_level] > 1 %>
+          <td class='text-center' data-bind="text: Points"></td>
+          <td class='text-center' data-bind="text: Pres"></td>
+        <% end %>
+        <td data-bind="text: BucqueEtFams, click: $parent.Show" colspan="2" class="blue bucqueetfams"></td>
+        <td data-bind="text: Name"></td>
+        <td data-bind="text: Boul"></td>
+        <td data-bind="text: Prepa"></td>
+        <td data-bind="text: Tel" class="minsize"></td>
+        <td class='text-center noleftborder' class="minsize"><i rel="tooltip" title="Expatrié" class="icon-plane" data-bind="visible: Saque > 0"></i></td>
+      </tr>
+    </tbody>
+  </table>
+  <p><span data-bind="text: Records().length"></span> PG listés - <%= link_to 'Toutes les punchlines.', punchlines_path %></p>
+  <% if session[:pg_level] && session[:pg_level] > 1 %>
+    <p id="stats"></p>
+  <% end %>
+</div>
+
+<script>
+ko.bindingHandlers.sort = {
+  init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    var asc = false;
+    element.style.cursor = 'pointer';
+      
+    element.onclick = function(){
+      var value = valueAccessor();
+      var prop = value.prop;
+      var data = value.arr;
+            
+      asc = !asc;
+      if(asc){
+        data.sort(function(left, right){
+          return left[prop] == right[prop] ? 0 : left[prop] < right[prop] ? -1 : 1;
+        });
+      } else {
+        data.sort(function(left, right){
+          return left[prop] == right[prop] ? 0 : left[prop] > right[prop] ? -1 : 1;
+        });
+      };
+    };
+  }
+};
+
+function ViewModel(){
+  var self = this;
+  self.Records = ko.observableArray();
+  self.Show = function(pg){
+    window.location.href=pg.Url;
+  };
+}
+
+var recs = [];
+<% totalpoints = 0 %>
+<% totalmanips = 0 %>
+<% @pgs.each do |pg| %>
+  <% totalpoints += pg[:points] %>
+  <% totalmanips += pg[:pres] %>
+  <% if session[:pg_level] && session[:pg_level] > 1 %>
+    <% s = 'recs.push({Name: "'+pg[:pg].nom+' '+pg[:pg].prenom+'", Points: '+pg[:points].to_s+', Num: "'+pg[:num]+'", Pres: '+pg[:pres].to_s+', Url: "'+url_for(pg[:pg])+'", Bucque: "'+pg[:pg].bucque+'", Fams: "'+pg[:pg].fam+'", BucqueEtFams: "'+pg[:pg].bucque+' '+pg[:pg].fam+'", Prepa: "'+pg[:pg].prepa.nom_complet+'", Boul: "'+pg[:pg].boul.nom+'", Tel: "'+(pg[:pg].tel || "")+'", Saque: "' %>
+  <% else %>
+    <% s = 'recs.push({Name: "'+pg[:pg].nom+' '+pg[:pg].prenom+'", Num: "'+pg[:num]+'", Url: "'+url_for(pg[:pg])+'", Bucque: "'+pg[:pg].bucque+'", Fams: "'+pg[:pg].fam+'", BucqueEtFams: "'+pg[:pg].bucque+' '+pg[:pg].fam+'", Prepa: "'+pg[:pg].prepa.nom_complet+'", Boul: "'+pg[:pg].boul.nom+'", Tel: "'+(pg[:pg].tel || "")+'", Saque: "' %>
+  <% end %>
+  <% if pg[:pg].saque == true %>
+    <% s += '1"});' %>
+  <% else %>
+    <% s += '0"});' %>
+  <% end %>
+  <%= raw s %>
+<% end %>
+
+var viewModel = new ViewModel();
+viewModel.Records(recs);
+ko.applyBindings(viewModel);
+
+$(function () {
+  $("[rel='tooltip']").tooltip();
+  <% if session[:pg_level] && session[:pg_level] > 1 %>
+    $('#stats').html('Moyenne des points : <%= Float(totalpoints*100/@pgs.length) / 100 %><br>Moyenne des présences : <%= Float(totalmanips*100/@pgs.length) / 100 %>');
+  <% end %>
+});
+</script>
+

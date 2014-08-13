@@ -1,0 +1,97 @@
+<div class="container">
+  
+  <%= form_for(@pg) do |f| %>
+    <% if @pg.errors.any? %>
+      <div id="error_explanation">
+        <h2 class="red">Il semble qu'il y ait un petit problème...</h2>
+        <ul>
+        <% @pg.errors.messages.each do |msg| %>
+          <li><strong><%= msg[1][0] %></strong></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field textfield float-clear">
+      <label>Prénom</label>
+      <%= f.text_field :prenom %>
+    </div>
+
+    <div class="field textfield">
+      <label>Nom</label>
+      <%= f.text_field :nom %>
+    </div>
+    <br>
+
+    <div class="field textfield float-clear">
+      <label>Bucque</label>
+      <%= f.text_field :bucque %>
+    </div>
+
+    <div class="field textfield">
+      <label>Fam'ss <small class="muted">Avec symboles et micros</small></label>
+      <%= f.text_field :fam %>
+    </div>
+
+    <div class="field naissancefield float-clear">
+      <label>Date de naissance</label>
+      <%= f.date_select :naissance, start_year: Time.now.year - 30, end_year: Time.now.year - 10, order: [:day, :month, :year], default: { day: 1, month: 1, year: 1992 }, with_css_classes: true %>
+    </div>
+    <div class="field">
+      <label>Téléphone</label>
+      <%= f.text_field :tel %>
+    </div>
+    <div class="field">
+      <label>Prépa d'origine</label>
+      <%= collection_select(:pg, :prepa_id, Prepa.order(nom: :asc).all, :id, :nom_complet) %> <small class="muted"><%= link_to "Ma prépa n'y est pas !", new_prepa_path %></small>
+    </div>
+
+    <div class="field">
+      <label>Seras-tu présent lors des Usin'ss ?</label>
+      <div class="btn-group" data-toggle="buttons-radio">
+        <button id="saque0" type="button" class="btn btn-primary">Oui, je serai là</button>
+        <button id="saque1" type="button" class="btn btn-primary">Non, je suis expat'</button>
+      </div>
+      <%= f.check_box :saque, class: 'hidden' %>
+    </div>
+    <div class="field">
+      <label>Quel sera ton Boul'ss ?</label>
+      <div class="btn-group" data-toggle="buttons-radio">
+        <%= f.collection_radio_buttons :boul_id, Boul.all, :id, :nom do |b| %>
+          <%= b.label(class: 'btn btn-primary') {b.radio_button(class: 'hidden') + b.text } %>
+        <% end %>
+      </div>
+    </div>
+    <br>
+    <div class="field">
+      <label>Une punchline qui t'inspire <small class="muted">optionnel</small></label>
+      <%= f.text_field :bio %>
+    </div>
+    <div class="field">
+      <label>Son auteur <small class="muted">optionnel</small></label>
+      <%= f.text_field :biocit %>
+    </div>
+    <br>
+    <div class="field">
+      <label>Choisis ton mot de passe</label>
+      <%= f.password_field :password %>
+    </div>
+    <div class="field">
+      <label>Entre-le encore</label>
+      <%= f.password_field :password_confirmation %>
+    </div>
+    <br><br>
+    <div class="actions">
+      <%= f.submit "Je m'inscris !", class: 'btn btn-large btn-primary' %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  $('#saque0').click(function(){
+    $("#pg_saque").prop("checked",false);;
+  });
+  $('#saque1').click(function(){
+    $("#pg_saque").prop("checked",true);;
+  });
+</script>

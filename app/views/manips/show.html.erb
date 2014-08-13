@@ -1,0 +1,27 @@
+<div class="container">
+  
+<h1 class="blue">
+  <%= @manip.nom %><br>
+  <small>
+    <%= @manip.lieu %>, 
+    <%= @manip.date.strftime("le %d/%m à %Hh%M") %>
+  </small>
+</h1>
+
+<p>
+  <% @manip.valeurs.each do |v| %>
+    <strong><%= v.boul.nom %></strong>
+    <%= v.point %>
+  <% end %>
+</p>
+<h2>Présents à cette manip</h2>
+  
+<ul>
+  <% @manip.presences.avecpg.each do |p| %>
+    <li><%= p.pg.bucque + " " + p.pg.fam %></li>
+  <% end %>
+</ul>
+<br>
+<%= link_to 'Modifier', edit_manip_path(@manip) %> | 
+<%= link_to 'Supprimer la manip', @manip, method: :delete, data: { confirm: 'Are you sure?' } %>
+</div>

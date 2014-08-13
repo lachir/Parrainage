@@ -1,0 +1,35 @@
+<div class="container">
+  
+<h1>Semaines des Usin'ss de KIN</h1>
+<%= link_to 'Nouvelle semaine', new_semaine_path %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Description</th>
+      <th>Début</th>
+      <th>Fin</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @semaines.each do |semaine| %>
+      <tr>
+        <td><%= semaine.nom %></td>
+        <td><%= semaine.description %></td>
+        <td><%= semaine.startdate.strftime("%d/%m/%Y") %></td>
+        <td><%= semaine.enddate.strftime("%d/%m/%Y") %></td>
+        <td><%= link_to 'Modifier', edit_semaine_path(semaine) %></td>
+        <td><%= link_to 'Supprimer', semaine, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+</div>

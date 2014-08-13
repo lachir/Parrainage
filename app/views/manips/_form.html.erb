@@ -1,0 +1,42 @@
+  
+<%= form_for(@manip) do |f| %>
+  <% if @manip.errors.any? %>
+    <div id="error_explanation">
+      <h2 class="red">Il semble qu'il y ait un petit problème...</h2>
+        <ul>
+        <% @manip.errors.messages.each do |msg| %>
+          <li><strong><%= msg[1][0] %></strong></li>
+        <% end %>
+        </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <label>Nom</label>
+    <%= f.text_field :nom %>
+  </div>
+  <div class="field"> 
+    <label>Lieu</label>
+    <%= f.text_field :lieu %>
+  </div>
+  <div class="field">
+    <label>Date et heure</label>
+    <%= f.datetime_select :date, with_css_classes: true %>
+  </div> 
+  <% i = 0 %>
+  <%= f.fields_for :valeurs do |builder| %>
+
+    <div class="field">
+      <label>Points pour les <%= @manip.valeurs[i].boul.nom %></label>
+      <%= builder.number_field :point %>
+    </div>
+    <%= builder.hidden_field :boul_id, :value => @manip.valeurs[i].boul.id %>
+
+    <% i+=1 %>
+
+  <% end %>
+<br>
+  <div class="actions">
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+<% end %>

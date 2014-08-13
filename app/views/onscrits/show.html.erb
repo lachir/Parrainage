@@ -1,0 +1,24 @@
+<div class="container">
+  <h1 class="blue">
+    <%= @onscrit.prenom+' '+@onscrit.nom %>
+  </h1>
+  <% now = Time.now.utc.to_date %>
+  <h4 class="muted">
+    <%= (now.year - @onscrit.naissance.year - ((now.month > @onscrit.naissance.month || (now.month == @onscrit.naissance.month && now.day >= @onscrit.naissance.day)) ? 0 : 1)).to_s+" ans, numéro " + @onscrit.num.to_s + " dans le monôme." %>
+  </h4>
+
+  <div class="text-center">
+    <%= image_tag @onscrit.photo.url(:large) %>
+  </div>
+  <br>
+
+  <div class="well float-clear">
+    <div class="showwell"><i rel="tooltip" title="Prépa d'origine" class="icon-home icon-fixed-width"></i> <%= @onscrit.prepa.nom+" ("+@onscrit.prepa.ville+")" %></div>
+    <div class="showwell"><i rel="tooltip" title="Date de naissance" class="icon-gift icon-fixed-width"></i> <%= @onscrit.naissance.strftime("%d/%m/%Y") %></div>
+  </div>
+  
+  <% if session[:pg_level] && session[:pg_level] > 1 %>
+    <%= link_to 'Modifier', edit_onscrit_path(@onscrit) %> |
+    <%= link_to 'Supprimer', @onscrit, method: :delete, data: { confirm: 'Are you sure?' } %>
+  <% end %>
+</div>

@@ -1,0 +1,32 @@
+<div class="container">
+  
+<h1>Classes préparatoires des PG et .onscrits de KIN</h1>
+<%= link_to 'Nouvelle prépa', new_prepa_path %>
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Ville</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @prepas.each do |prepa| %>
+      <tr>
+        <td><%= prepa.nom %></td>
+        <td><%= prepa.ville %></td>
+        <td><%= link_to 'Show', prepa %></td>
+        <td><%= link_to 'Edit', edit_prepa_path(prepa) %></td>
+        <td><%= link_to 'Destroy', prepa, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+</div>

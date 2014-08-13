@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Parrainage</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div class="navbar">
+	<div class="navbar-inner">
+		<div class="container">
+			<%= link_to root_path, class: 'brand' do %>
+				KIN <i class="icon-shield"></i> Parrainage
+			<% end %>
+			<div class="nav-collapse collapse navbar-responsive-collapse">
+				<ul class="nav">
+	                <% if session[:pg_level] %>
+						<li><%= link_to 'PG', pgs_path %></li>
+						<li class="dropdown">
+							<%= link_to onscrits_path do %>
+								.onscrits <b class="caret"></b>
+							<% end %>
+		                    <ul class="dropdown-menu">
+								<li>
+									<%= link_to onscrits_path do %>
+										<i class="icon-list icon-fixed-width"></i> Liste simple
+									<% end %>
+								</li>
+								<li>
+									<%= link_to learn_onscrits_path do %>
+										<i class="icon-eye-open icon-fixed-width"></i> Apprendre les noms
+									<% end %>
+								</li>
+								<li>
+									<%= link_to learnreverse_onscrits_path do %>
+										<i class="icon-eye-close icon-fixed-width"></i> Apprendre les visages
+									<% end %>
+								</li>
+		                    </ul>
+		                </li>
+						<li><%= link_to 'Sondages', sondages_path %></li>
+	                	<% if session[:pg_level] > 1 %>
+							<li><%= link_to 'Manips', manips_path %></li>
+						<% end %>
+					<% end %>
+				</ul>
+				<ul class="nav pull-right navbarright">
+	                <% if session[:pg_level] %>
+						<form class="navbar-search" action="">
+							<input id="search" type="text" class="search-query span2 typeahead" placeholder="PG, .onscrit..." autocomplete="off">
+						</form>
+					<% end %>
+					<li class="divider-vertical"></li>
+					<% if session[:pg_level] && session[:pg_level] > 1 %>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i></a>
+							<ul class="dropdown-menu">
+								<li class="nav-header">Données PG</li>
+								<li>
+									<%= link_to bouls_path do %>
+										<i class="icon-bolt icon-fixed-width"></i> Boul'ss
+									<% end %>
+									<%= link_to prepas_path do %>
+										<i class="icon-home icon-fixed-width"></i> Prépas
+									<% end %>
+									<%= link_to semaines_path do %>
+										<i class="icon-calendar icon-fixed-width"></i> Semaines
+									<% end %>
+									<%= link_to barcodes_path do %>
+										<i class="icon-barcode icon-fixed-width"></i> Code-barres
+									<% end %>
+								</li>
+								<li class="divider"></li>
+								<li class="nav-header">Gestion</li>
+								<li>
+									<%= link_to new_sondage_path do %>
+										<i class="icon-comments icon-fixed-width"></i> Nouveau sondage
+									<% end %>
+									<%= link_to new_pg_path do %>
+										<i class="icon-pencil icon-fixed-width"></i> Inscription PG
+									<% end %>
+									<%= link_to new_onscrit_path do %>
+										<i class="icon-pencil icon-fixed-width"></i> Inscription .onscrit
+									<% end %>
+									<%= link_to admins_path do %>
+										<i class="icon-user-md icon-fixed-width"></i> Administrateurs
+									<% end %>
+									<%= link_to infos_path do %>
+										<i class="icon-info icon-fixed-width"></i> Informations
+									<% end %>
+								</li>
+							</ul>
+						</li>
+					<% end %>
+					<li>
+						<% if session[:pg_level] %>
+							<%= link_to logout_path do %>
+								<i class="icon-off icon-fixed-width"></i> 
+								<span class="sessionname">
+									<%= session[:pg_name] %>
+								</span>
+								<% if session[:pg_level] > 1 %>
+									<span class="nav-description">
+										Administrateur
+									</span>
+								<% end %>
+							<% end %>
+						<% else %>
+							<%= link_to beforelogin_path do %>
+								<i class="icon-off icon-fixed-width"></i>
+							<% end %>
+							<li class="divider-vertical"></li>
+						<% end %>
+					</li>
+				</ul>
+			</div><!-- /.nav-collapse -->
+		</div>
+	</div><!-- /navbar-inner -->
+</div><!-- /navbar -->
+
+<% if notice %> 
+	<div class="container">
+		<% if notice[:status] == 'success' %>
+			<div class="alert alert-success">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<%= notice[:message] %>
+			</div>
+		<% else %>
+			<div class="alert alert-error">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<%= notice[:message] %>
+			</div>
+		<% end %>
+	</div>
+<% end %>
+
+<%= yield %>
+<br><br>
+
+<small class="muted footer">Rézal KIN 212</p>
+<script>
+	$('#search').typeahead({
+        source: function (query, process) {
+            pgsonscrits = [];
+            map = {};
+         
+            var data = [
+                <% @recherche.each do |r| %>
+                	<%= raw '{"label": "'+r[1][:label]+'", "url": "'+r[1][:url]+'"},' %>
+                <% end %>
+            ];
+         
+            $.each(data, function (i, ungars) {
+                map[ungars.label] = ungars;
+                pgsonscrits.push(ungars.label);
+            });
+         
+            process(pgsonscrits);
+        },
+        updater: function (item) {
+        	window.location.href=map[item].url;
+            return item;
+        },
+        matcher: function (item) {
+            if (item.toLowerCase().indexOf(this.query.trim().toLowerCase()) != -1) {
+                return true;
+            }
+        },
+        sorter: function (items) {
+            return items.sort();
+        },
+        highlighter: function (item) {
+           var regex = new RegExp( '(' + this.query + ')', 'gi' );
+            return item.replace( regex, "<strong>$1</strong>" );
+        },
+    });
+</script>
+</body>
+</html>

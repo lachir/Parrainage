@@ -1,0 +1,97 @@
+<div class="container text-center">
+	<h1 class="blue">
+		<%= @manip.nom %>
+	</h1>
+    <p>
+        <%= @manip.date.utc.strftime("le %d/%m à %Hh%M") + ', ' + @manip.lieu %>
+        <br>
+        <% s = "" %>
+        <% @manip.valeurs.each do |v| %>
+        <% s += v.boul.nom + ': ' + v.point.to_s + ' / '%>
+        <% end %>
+        <%= s[0..-4] %>
+    </p>
+	<br>
+	<p>Scanne un PG :</p>
+	<form data-bind='submit: checkPg'>
+	    <input autofocus id="scan" type="password" data-bind='value: itemToAdd, valueUpdate: "afterkeydown"' autocomplete="off"/>
+	</form>
+	<p id="infopg" class="lead" data-bind='text: infoPg, style: { color: verif() < 0 ? "#e74c3c" : "#2ecc71" }'></p>
+</div>
+<div class="largecontainer">
+    <h3><span data-bind="text: pgs().length"></span> présents à cette manip :</h3>
+	<div data-bind='template: { foreach: pgs}'>
+        <div class='pull-left listepg'>
+        	<span data-bind="text: bucqueetfam"></span>,
+        </div>
+            
+    </div>
+</div>
+
+<script>
+$('#scan').focus();
+function addPg(bucque, fam) {
+	var self         = this;
+	self.bucque      = bucque;
+	self.fam         = fam;
+	self.bucqueetfam = bucque + ' ' + fam;
+    var k = fam.length;
+    for (i = 0; i < fam.length; i++) {
+        if (isNaN(fam.substring(0,i+1))) {
+            k = i;
+            break;
+        };
+    };
+    self.num = parseInt(fam.substring(0,k));
+};
+
+
+var CheckPgViewModel = function() {
+
+    var self = this;
+    self.itemToAdd = ko.observable("");
+    self.infoPg = ko.observable("En attente d'un premier scan");
+    self.verif = ko.observable(111);
+    self.pgs = ko.observableArray([ 
+        <% @presences.each do |p| %> 
+        	<%= raw 'new addPg("' + p.pg.bucque + '","' + p.pg.fam + '"),' %> 
+        <% end %>
+    ]);
+    self.pgs.sort(function(left, right) { 
+        return left.num == right.num ? 0 : (left.num < right.num ? -1 : 1) 
+    });
+
+    self.checkPg = function() {
+
+    	var bc = self.itemToAdd();
+
+    	if (bc != "") {
+
+        	var jsonData = { 'barcode': bc, 'manip_id' : <%= @manip.id %> };
+
+            $.post("<%= url_for(check_pg_path) %>", jsonData, function(allData) {
+
+                if (allData.status == "ok") {
+                	self.infoPg(allData.data.bucque+' '+allData.data.fam)
+                	self.pgs.unshift(new addPg(allData.data.bucque, allData.data.fam));
+                    self.pgs.sort(function(left, right) { 
+                        return left.num == right.num ? 0 : (left.num < right.num ? -1 : 1) 
+                    });
+                    self.verif(111);
+                } else {
+                	self.infoPg(decodeURI(allData.data));
+                    self.verif(-111);
+                };
+            }).error(function() {
+                alert('erreur lors du post AJAX! Recharge la page avant de continuer.')
+            });
+
+            };
+            self.itemToAdd("");
+    		
+    	};
+
+    };
+
+ko.applyBindings(new CheckPgViewModel());
+</script>

@@ -1,0 +1,41 @@
+<div class="container">
+  
+<h1 class="blue">Sondages parrainage</h1>
+<br>
+</div>
+<div class="largecontainer">
+  
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Description</th>
+      <th>Début</th>
+      <th>Fin</th>
+      <% if session[:pg_level] > 1 %>
+        <th></th>
+        <th></th>
+        <th></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sondages.each do |sondage| %>
+      <tr>
+        <td><%= link_to sondage.nom, sondage %></td>
+        <td><%= sondage.description %></td>
+        <td><%= sondage.startdate.strftime("le %d/%m à %Hh%M") %></td>
+        <td><%= sondage.enddate.strftime("le %d/%m à %Hh%M") %></td>
+        <% if session[:pg_level] > 1 %>
+          <td><%= link_to 'Résumé', review_sondage_path(sondage) %></td>
+          <td><%= link_to 'Modifier', edit_sondage_path(sondage) %></td>
+          <td><%= link_to 'Supprimer', sondage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+</div>

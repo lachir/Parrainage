@@ -1,0 +1,65 @@
+<div class="container">
+	<h1 class="blue">Résumé du sondage <%= @sondage.nom %></h1>
+	<p class="lead"><%= @sondage.votes.length / @sondage.nbchoix %> PG ont participés au sondage.</p>
+	<div class="row">
+		<div class="span4">
+			<p>.onscrits par ordre alphabétique :</p>
+			<ul>
+				<% @onscrits.each do |o| %>
+					<li>
+						<%= o.nom_complet %>
+						<ul>
+							<% @sondage.votes.each do |v| %>
+								<% if v.onscrit == o %>
+									<li>
+										<%= v.pg.bucque + ' ' + v.pg.fam + ' : ' + v.priorite.to_s %>
+									</li>
+								<% end %>
+							<% end %>
+						</ul>
+					</li>
+				<% end %>
+			</ul>
+		</div>
+		<div class="span4">
+			<p>PG par ordre de réponse :</p>
+			<ul>
+				<% i = 0 %>
+				<% @sondage.votes.each do |v| %>
+					<% if i % @sondage.nbchoix == 0 %>
+						<li>
+							<%= v.pg.bucque + ' ' + v.pg.fam %>
+							<ul>
+								<li><%= v.priorite.to_s + ' : ' + v.onscrit.nom_complet %></li>
+					<% else %>
+						<li><%= v.priorite.to_s + ' : ' + v.onscrit.nom_complet %></li>
+					<% end %>
+					<% if (i+1) % @sondage.nbchoix == 0 %>
+							</ul>
+						</li>
+					<% end %>
+					<% i += 1 %>
+				<% end %>
+			</ul>
+		</div>
+		<div class="span4">
+			<p>PG par ordre de points :</p>
+			<ul>
+				<% @pgpoints.each do |pg| %>
+					<li>
+						<%= pg[:pg].bucque + ' ' + pg[:pg].fam + ' (' + pg[:points].to_s + ')' %>
+						<ul>
+							<% @sondage.votes.each do |v| %>
+								<% if v.pg_id == pg[:pg].id %>
+									<li><%= v.priorite.to_s + ' : ' + v.onscrit.nom_complet %></li>
+								<% end %>
+							<% end %>
+						</ul>
+					</li>
+				<% end %>
+			</ul>
+		</div>
+	</div>
+	
+
+</div>

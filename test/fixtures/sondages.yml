@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  nom: MyString
+  description: MyText
+  nbchoix: 1
+  startdate: 2013-08-22 09:30:09
+  enddate: 2013-08-22 09:30:09
+
+two:
+  nom: MyString
+  description: MyText
+  nbchoix: 1
+  startdate: 2013-08-22 09:30:09
+  enddate: 2013-08-22 09:30:09

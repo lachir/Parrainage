@@ -1,0 +1,160 @@
+.float-clear{
+	clear: both;
+}
+.float-left{
+	float: left;
+}
+.blue{
+	color: #5e95cc;
+}
+.red {
+	color: red;
+}
+label{
+	color: #5e95cc;
+}
+
+.footer {
+	position:fixed;
+	bottom:0px;
+	right:15px;
+	z-index:-1;
+}
+
+.icon-fixed-width {
+  width: 1.28571429em;
+  display: inline-block;
+  text-align: left !important;
+  padding-right: 0px !important;
+}
+
+.typeahead + .dropdown-menu .active > a,
+.typeahead + .dropdown-menu .active > a:hover {
+    color: #ffffff;
+    background-color: #5e95cc;
+}
+
+.inscriptionsubtitle {
+	margin-bottom: -5px;
+	font-style: italic;
+}
+
+.field {
+	display: block;
+	margin-right: 10px;
+	margin-top: 20px;
+}
+.textfield {
+	float: left;
+	width: auto;
+}
+.day, .month, .year, .hour, .minute {
+	width: auto;
+	margin-right: 5px;
+}
+.naissancefield{
+	padding-top: 20px;
+}
+table{
+	font-size: 120%;
+}
+.text-center{
+	text-align: center !important;
+}
+.text-right{
+	text-align: right !important;
+}
+.largecontainer {
+	width: 80%;
+	margin: auto;
+}
+.bucqueetfams{
+	cursor: pointer;
+}
+.noleftborder{
+	border-left: 0px !important;
+}
+.editbio{
+	margin-right: 20px;
+	cursor: pointer !important;
+}
+.showwell:last-child{
+	margin-bottom: 0px;
+}
+.showwell{
+	margin-bottom: 10px;
+}
+blockquote.pull-right {
+  float: right;
+  padding-right: 15px;
+  padding-left: 0;
+  border-right: 5px solid #5e95cc;
+  border-left: 0;
+}
+
+blockquote.pull-right p,
+blockquote.pull-right small {
+  text-align: right;
+}
+
+blockquote.pull-right small:before {
+  content: '';
+}
+
+blockquote.pull-right small:after {
+  content: '\00A0 \2014';
+}
+.bio {
+	margin-top: 0px;
+	margin-bottom: 20px;
+}
+.minsize{
+	white-space: nowrap;
+	width: 1px;
+}
+.listepg{
+	margin-right: 10px;
+	margin-top: 5px;
+	font-size: 120%;
+}
+.listeonscrit{
+	vertical-align: middle !important;
+}
+.barcodecontainer{
+	background-color: #fff;
+	color: #000;
+	padding-top: 20px;
+	padding-left: 15px;
+	padding-right: 10px;
+	max-width: 21cm;
+}
+.barcode{
+	text-align: center;
+	margin-bottom: 20px;
+	margin-right: 20px;
+	float: left;
+}
+.learnonscrits{
+	margin-right: 35px;
+}
+.sessionname{
+	font-size: 90%;
+	font-weight: normal;
+	text-transform: none;
+}
+.navbarright{
+	margin-right: -20px !important;
+}
+.text-small{
+	font-size: 80%;
+}
+.chiris{
+	min-height: 350px;
+	min-width: 300px;
+}
+.btnmicro{
+	margin-top: -12px;
+}
+.inputfam{
+	width: 168px !important;
+}

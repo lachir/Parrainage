@@ -1,0 +1,73 @@
+<div class="container">
+
+  <h1 class="blue">Sondage <%= @sondage.nom %></h1>
+  <p class="lead">Début <%= @sondage.startdate.strftime("le %d/%m à %Hh%M")%>, fin <%= @sondage.enddate.strftime("le %d/%m à %Hh%M")%></p>
+
+  <span class="muted">Description :</span>
+  <blockquote>
+    <p><%= simple_format @sondage.description, class: "lead" %></p>
+  </blockquote>
+
+  <% if (Time.parse(@sondage.startdate.to_s) <= Time.now && Date.parse(@sondage.startdate.to_s) <= Date.today && Time.parse(@sondage.enddate.to_s) >= Time.now && Date.parse(@sondage.enddate.to_s) >= Date.today) %>
+    <div id="votes">
+      <% if @votes.any? %>
+        <h3 class="blue">Mes voeux :</h3>
+        <% @votes.each do |v| %>
+          <p class="lead">N°<%= v.priorite %> : <strong><%= v.onscrit.nom_complet %></strong></p>
+        <% end %>
+        <span id="revoter" class="btn btn-primary btn-large">Revoter</span>
+      <% end %>
+    </div>
+    <div id="voter">
+      <%= form_tag vote_path(@sondage) do |f| %>
+        <% i = 1 %>
+        <% @sondage.nbchoix.times do %>
+          <div class="field">
+            <label>Voeu n°<%= i.to_s %></label>
+            <%= collection_select('vote'+i.to_s, :onscrit_id, @onscrits, :id, :nom_complet) %>
+          </div>
+          <% i += 1 %>
+        <% end %>
+        <p>Ton vote sera enregistré avec le profil <%= session[:pg_name] %>. <br>Il te sera possible avant la fermeture des votes de revenir sur cette page pour modifier tes choix.</p>
+        <div class="actions">
+          <%= submit_tag "Voter", class: 'btn btn-primary btn-large' %>
+        </div>
+      <% end %>
+    </div>
+
+  <% else %>
+
+    <% if (Time.parse(@sondage.startdate.to_s) <= Time.now && Date.parse(@sondage.startdate.to_s) <= Date.today && Time.parse(@sondage.enddate.to_s) <= Time.now && Date.parse(@sondage.enddate.to_s) <= Date.today) %>
+
+      <p class="lead">Le vote pour ce sondage n'est plus disponible.</p>
+      <div id="votes">
+        <% if @votes.any? %>
+          <h3 class="blue">Mes voeux :</h3>
+          <% @votes.each do |v| %>
+            <p class="lead">N°<%= v.priorite %> : <strong><%= v.onscrit.nom_complet %></strong></p>
+          <% end %>
+        <% end %>
+      </div>
+
+    <% end %>
+    <% if (Time.parse(@sondage.startdate.to_s) >= Time.now && Date.parse(@sondage.startdate.to_s) >= Date.today && Time.parse(@sondage.enddate.to_s) >= Time.now && Date.parse(@sondage.enddate.to_s) >= Date.today) %>
+
+      <p class="lead">La phase de vote n'a pas commencée, reviens après l'heure d'ouverture.</p>
+
+    <% end %>
+  <% end %>
+  
+</div>
+
+<% if (Time.parse(@sondage.startdate.to_s) <= Time.now && Date.parse(@sondage.startdate.to_s) <= Date.today && Time.parse(@sondage.enddate.to_s) >= Time.now && Date.parse(@sondage.enddate.to_s) >= Date.today && @votes.any?) %>
+  <script>
+    $(function() {
+      $("#voter").hide();
+    });
+    $('#revoter').click(function(){
+      $('#votes').hide();
+      $('#voter').show();
+    });
+  </script>
+<% end %>
+

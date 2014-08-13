@@ -1,0 +1,77 @@
+<div class="container">
+  <h1 class="blue">.onscrits de la .orde .14</h1>
+</div>
+<br>
+<div class="container">
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th class='text-center minsize'>Photo</th>
+        <th class='text-right' data-bind="sort: { arr: Records, prop: 'Prenom' }">Prénom</th>
+        <th class='noleftborder' data-bind="sort: { arr: Records, prop: 'Nom' }">Nom</th>
+        <th class='text-center' data-bind="sort: { arr: Records, prop: 'Num' }">Num's</th>
+        <th class='text-center' data-bind="sort: { arr: Records, prop: 'Prepa' }">Prépa</th>
+      </tr>
+    </thead>
+    <tbody data-bind="foreach: Records">
+      <tr>
+        <td class='text-center minsize listeonscrit'><img data-bind="attr:{src: Photo}"/></td>
+        <td class="bucqueetfams listeonscrit text-right" data-bind="text: Prenom, click: $parent.Show"></td>
+        <td class="bucqueetfams listeonscrit noleftborder" data-bind="text: Nom, click: $parent.Show"></td>
+        <td class="listeonscrit text-center" data-bind="text: Num"></td>
+        <td class="listeonscrit text-center" data-bind="text: Prepa"></td>
+      </tr>
+    </tbody>
+  </table>
+  <span data-bind="text: Records().length"></span> .onscrits listés
+</div>
+
+<script>
+ko.bindingHandlers.sort = {
+  init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    var asc = false;
+    element.style.cursor = 'pointer';
+      
+    element.onclick = function(){
+      var value = valueAccessor();
+      var prop = value.prop;
+      var data = value.arr;
+            
+      asc = !asc;
+      if(asc){
+        data.sort(function(left, right){
+          return left[prop] == right[prop] ? 0 : left[prop] < right[prop] ? -1 : 1;
+        });
+      } else {
+        data.sort(function(left, right){
+          return left[prop] == right[prop] ? 0 : left[prop] > right[prop] ? -1 : 1;
+        });
+      };
+    };
+  }
+};
+
+
+function ViewModel(){
+  var self = this;
+  self.Records = ko.observableArray();
+  self.Show = function(onscrit){
+    window.location.href=onscrit.Url;
+  };
+}
+
+var recs = [];
+<% @onscrits.each do |o| %>
+  <% s = 'recs.push({Nom: "'+o.nom+'", Prenom: "'+o.prenom+'", Num: '+o.num.to_s+', Naissance: "'+o.naissance.strftime("%m/%d/%Y")+'", Prepa: "'+o.prepa.nom+'", Url: "'+url_for(o)+'", Photo: "' %>
+  <% if o.photo.exists? %>
+    <% s += o.photo.url(:thumb)+'"});' %>
+  <% else %>
+    <% s += '"});' %>
+  <% end %>
+  <%= raw s %>
+<% end %>
+
+var viewModel = new ViewModel();
+viewModel.Records(recs);
+ko.applyBindings(viewModel);
+</script>
